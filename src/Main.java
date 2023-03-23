@@ -7,7 +7,7 @@ public class Main {
         Scanner input = new Scanner(System.in);
         Basket basket;
 
-        File file = new File("basket.txt");
+        File file = new File("basket.bin");
             Product[] products = new Product[3];
             products[0] = new Product("Milk", 80);
             products[1] = new Product("Bread", 50);
