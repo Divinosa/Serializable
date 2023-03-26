@@ -7,7 +7,7 @@ public class Main {
         Scanner input = new Scanner(System.in);
         Basket basket;
 
-        File file = new File("basket.txt");
+        File file = new File("basket.json");
             Product[] products = new Product[3];
             products[0] = new Product("Milk", 80);
             products[1] = new Product("Bread", 50);
@@ -27,30 +27,19 @@ public class Main {
             System.out.println("Выберите товар и количество или введите `end`");
             String inputString = input.nextLine();
             if (inputString.equals("end")) {
-                basket.saveTxt(file);
                 System.out.println("Ваша корзина:");
                 basket.printCart();
+                basket.saveTxt(file);
                 break;
             } else {
                 String[] product = inputString.split(" ");
                 int productNumber = Integer.parseInt(product[0]) - 1;
                 int productCount = Integer.parseInt(product[1]);
-                switch (productNumber) {
-                    case (0):
-                        products[0].setProductCount(productCount);
-                        System.out.println(products[productNumber] + " добавлен в кол-ве " + productCount);
-                        break;
-                    case (1):
-                        products[1].setProductCount(productCount);
-                        System.out.println(products[productNumber] + " добавлен в кол-ве " + productCount);
-                        break;
-                    case (2):
-                        products[2].setProductCount(productCount);
-                        System.out.println(products[productNumber] + " добавлен в кол-ве " + productCount);
-                        break;
-                    default:
-                        System.out.println("Продукт с данным номер не существует");
-                        break;
+                if (productNumber >= 0 & productNumber < products.length) {
+                    products[productNumber].setProductCount(productCount);
+                    System.out.println(products[productNumber] + " добавлен в кол-ве " + productCount);
+                } else {
+                    System.out.println("Продукт с данным номер не существует");
                 }
             }
         }
