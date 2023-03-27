@@ -6,6 +6,7 @@ public class Main {
 
         Scanner input = new Scanner(System.in);
         Basket basket;
+        ClientLog clientLog = new ClientLog();
 
         File file = new File("basket.json");
             Product[] products = new Product[3];
@@ -30,13 +31,15 @@ public class Main {
                 System.out.println("Ваша корзина:");
                 basket.printCart();
                 basket.saveTxt(file);
+
                 break;
             } else {
                 String[] product = inputString.split(" ");
                 int productNumber = Integer.parseInt(product[0]) - 1;
                 int productCount = Integer.parseInt(product[1]);
                 if (productNumber >= 0 & productNumber < products.length) {
-                    products[productNumber].setProductCount(productCount);
+                    basket.addToCart(productNumber, productCount);
+                    clientLog.exportAsCSV(products[productNumber].getProductName(), productCount);
                     System.out.println(products[productNumber] + " добавлен в кол-ве " + productCount);
                 } else {
                     System.out.println("Продукт с данным номер не существует");

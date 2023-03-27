@@ -12,7 +12,8 @@ public class Basket implements Serializable {
         cart = products;
     }
 
-    public void addToCart(String productName, int count) {
+    public void addToCart(int productNumber, int productCount) {
+        cart[productNumber].setProductCount(productCount);
     }
 
     public void printCart() {
