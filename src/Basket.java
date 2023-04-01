@@ -1,5 +1,8 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
@@ -23,29 +26,47 @@ public class Basket implements Serializable {
 
     }
 
-    public void saveTxt(File txtFile) throws IOException {
-        FileOutputStream out = new FileOutputStream(txtFile);
-        Gson gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .create();
-        out.write(gson.toJson(cart).getBytes(StandardCharsets.UTF_8));
-        out.close();
+    public void saveTxt() throws IOException, ParserConfigurationException, SAXException {
+        Shop shop = new Shop("save");
+        if (Shop.active) {
+            FileOutputStream out = new FileOutputStream(Shop.fileName);
+            if (Shop.format == 1) {
+                Gson gson = new GsonBuilder()
+                        .setPrettyPrinting()
+                        .create();
+                out.write(gson.toJson(cart).getBytes(StandardCharsets.UTF_8));
+                out.close();
+            } else if (Shop.format == 2) {
+                ObjectOutputStream obj = new ObjectOutputStream(out);
+                obj.writeObject(this);
+                obj.close();
+            }
+        }
     }
 
-    static Product[] loadFromTxtFile(File textFile) throws IOException {
-        FileInputStream file = new FileInputStream(textFile);
-        int i;
-        StringBuilder initLoad = new StringBuilder();
-        while ((i = file.read()) != -1) {
-            initLoad.append(Character.toChars(i));
+    static Basket loadFromTxtFile() throws IOException, ParserConfigurationException, SAXException, ClassNotFoundException {
+        Shop shop = new Shop("load");
+        Basket loadBasket = null;
+        if (Shop.active) {
+            FileInputStream file = new FileInputStream(Shop.fileName);
+            if (Shop.format == 1) {
+                int i;
+                StringBuilder initLoad = new StringBuilder();
+                while ((i = file.read()) != -1) {
+                    initLoad.append(Character.toChars(i));
 
+                }
+                file.close();
+                String loadJsonText = initLoad.toString();
+                GsonBuilder builder = new GsonBuilder();
+                Gson gson = builder.create();
+                loadBasket = new Basket(gson.fromJson(loadJsonText, Product[].class));
+            } else if (Shop.format == 2) {
+                ObjectInputStream obf = new ObjectInputStream(file);
+                Basket basket = (Basket) obf.readObject();
+                loadBasket = new Basket(basket.cart);
+            }
         }
-        file.close();
-        String loadJsonText = initLoad.toString();
-        GsonBuilder builder = new GsonBuilder();
-        Gson gson = builder.create();
-        Product[] loadProduct = gson.fromJson(loadJsonText, Product[].class);
-        return loadProduct;
-
+        return loadBasket;
     }
 }

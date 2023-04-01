@@ -7,14 +7,12 @@ public class Main {
         Scanner input = new Scanner(System.in);
         Basket basket;
         ClientLog clientLog = new ClientLog();
-
-        File file = new File("basket.json");
             Product[] products = new Product[3];
             products[0] = new Product("Milk", 80);
             products[1] = new Product("Bread", 50);
             products[2] = new Product("Meat", 180);
             try {
-               basket = new Basket(Basket.loadFromTxtFile(file));
+               basket = Basket.loadFromTxtFile();
             } catch (Exception e){
                 basket = new Basket(products);
             }
@@ -30,7 +28,7 @@ public class Main {
             if (inputString.equals("end")) {
                 System.out.println("Ваша корзина:");
                 basket.printCart();
-                basket.saveTxt(file);
+                basket.saveTxt();
 
                 break;
             } else {
