@@ -31,13 +31,16 @@ public class Shop {
             params[i] = params[i].trim();
         }
         setActive();
-        setFormat();
-        setFileName();
+        if (active){
+            setFileName();
+            if (params.length > 2){
+                setFormat();
+            }
+        }
     }
 
     private void setActive(){
         active = params[0].equals("true");
-
     }
     private void setFormat(){
         if (params[2].equals("json")){

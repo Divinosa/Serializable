@@ -1,6 +1,8 @@
 import com.opencsv.CSVWriter;
 import org.json.simple.JSONObject;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,10 +19,11 @@ public class ClientLog implements Serializable {
             System.out.println(obj);
         }
 
-        public void exportAsCSV(String cart, int productCount) throws IOException {
+        public void exportAsCSV(String cart, int productCount) throws IOException, ParserConfigurationException, SAXException {
+            Shop shop = new Shop("log");
             String str = cart + " " + Integer.toString(productCount);
             log = str.split(" ");
-            CSVWriter csvWriter = new CSVWriter(new FileWriter("CSVLog.csv", true));
+            CSVWriter csvWriter = new CSVWriter(new FileWriter(Shop.fileName, true));
             csvWriter.writeNext(log);
             csvWriter.flush();
             csvWriter.close();

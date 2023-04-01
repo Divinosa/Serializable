@@ -1,4 +1,3 @@
-import java.io.File;
 import java.util.Scanner;
 
 public class Main {
@@ -11,12 +10,10 @@ public class Main {
             products[0] = new Product("Milk", 80);
             products[1] = new Product("Bread", 50);
             products[2] = new Product("Meat", 180);
-            try {
-               basket = Basket.loadFromTxtFile();
-            } catch (Exception e){
+            basket = Basket.loadFromTxtFile();
+            if (basket == null){
                 basket = new Basket(products);
             }
-
         System.out.println("Список возможных товаров для покупки:");
         for (int i = 0; i < products.length; i++) {
             System.out.println((i + 1) + ". " + products[i].toString());
